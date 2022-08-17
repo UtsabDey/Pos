@@ -60,3 +60,8 @@ h4{
     background: #008B8B;
     color: #fff;
 }
+
+.modal.fade:not(.in)#addUser .modal-dialog{
+    -webkit-transform: translate3d(10%, 0, 0);
+    transform: translate3d(10%, 0, 0);
+}

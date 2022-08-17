@@ -1,3 +1,6 @@
+@php
+    $company = \App\Models\Company::first();
+@endphp
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -8,7 +11,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    @if ($company->company_name)
+        <title>@yield('title') - {{ $company->company_name }}</title>
+    @else
+        <title>@yield('title') - Laravel POS</title>
+    @endif
+
+    <link rel="icon" href="{{ asset('icon.png') }}" type="image/icon type" sizes="16x16">
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -22,6 +31,10 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('fontawesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dataTable/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dataTable/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('toastr/toastr.min.css') }}">
+
 </head>
 
 <body>
@@ -65,6 +78,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    Test
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -87,7 +101,6 @@
         </main>
 
         {{-- Sidebar Section --}}
-        <!-- Button trigger modal -->
 
         <!-- Modal -->
         <div class="modal left fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -106,8 +119,53 @@
         </div>
     </div>
 
+    @yield('scripts')
+
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('dataTable/datatables.min.js') }}"></script>
+    <script src="{{ asset('dataTable/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('toastr/toastr.min.js') }}"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    </script>
+
+    {{-- Toastr Script --}}
+    <script>
+        @if (Session::has('success'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.success("{{ session('success') }}");
+        @endif
+        @if (Session::has('error'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.error("{{ session('error') }}");
+        @endif
+        @if (Session::has('info'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.info("{{ session('info') }}");
+        @endif
+        @if (Session::has('warning'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true
+            }
+            toastr.warning("{{ session('warning') }}");
+        @endif
+    </script>
 </body>
 
 </html>
