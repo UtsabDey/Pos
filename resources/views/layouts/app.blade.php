@@ -44,7 +44,7 @@ $company = \App\Models\Company::first();
                 @if (Auth::check())
                     @include('layouts.navbar')
                 @else
-                <a href="#" class="navbar-brand">Laravel POS Management System</a>
+                    <a href="#" class="navbar-brand">Laravel POS Management System</a>
                 @endif
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -123,8 +123,6 @@ $company = \App\Models\Company::first();
         </div>
     </div>
 
-    @yield('scripts')
-
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
@@ -132,10 +130,28 @@ $company = \App\Models\Company::first();
     <script src="{{ asset('dataTable/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('toastr/toastr.min.js') }}"></script>
 
+    @yield('scripts')
 
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable({
+                "processing": true,
+                "pageLength": 5,
+                "lengthMenu": [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, "All"]
+                ]
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#dataTable2').DataTable({
+                columnDefs: [{
+                    orderable: false,
+                    targets: 6
+                }],
                 "processing": true,
                 "pageLength": 5,
                 "lengthMenu": [

@@ -25,7 +25,7 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="" class="form-label">Role</label>
-                                    <select name="is_admin" class="form-control" id="" required>
+                                    <select name="is_admin" class="form-control form-select" id="" required>
                                         <option value="">Select User Role</option>
                                         <option value="1">Admin</option>
                                         <option value="2">Cashire</option>

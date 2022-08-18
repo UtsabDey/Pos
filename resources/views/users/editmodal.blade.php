@@ -27,7 +27,7 @@
                             <div class="col-md-5">
                                 <div class="mb-3">
                                     <label for="" class="form-label">Role</label>
-                                    <select name="is_admin" class="form-control" id="" required>
+                                    <select name="is_admin" class="form-control form-select" id="" required>
                                         <option value="1" {{ ($user->is_admin == 1) ? 'selected' : ''}} >Admin</option>
                                         <option value="2" {{ ($user->is_admin == 2) ? 'selected' : ''}}>Cashire</option>
                                     </select>
