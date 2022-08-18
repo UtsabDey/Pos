@@ -5,7 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                {{-- <div class="card-header">{{ __('Register') }}</div> --}}
+                <h4 class="card-header" style="background: #008B8B; color: #fff;">
+                    <marquee behavior="" direction="">Welcome to Laravel POS Management System Registration</marquee>
+                </h4>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">

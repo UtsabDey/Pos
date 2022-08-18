@@ -20,29 +20,12 @@ class UserController extends Controller
         return view('users.index', $data)->with('no', 1);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
             'name' => 'required|string|max:200',
             'is_admin' => 'required',
             'email' => 'required|unique:users,email',
-            // 'phone' => 'required|string',
             'password' => 'required|same:confirm_password|max:100',
         ]);
 
@@ -69,7 +52,7 @@ class UserController extends Controller
         $validate = Validator::make($request->all(), [
             'name' => 'required|string|max:200',
             'is_admin' => 'required',
-            'email' => 'required|unique:users,email,' . $id . ',id',
+            'email' => 'required|unique:users,email,' . $id,
         ]);
 
         if ($validate->fails()) {

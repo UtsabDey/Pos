@@ -18,7 +18,7 @@
             </div>
             <div class="col-md-3">
                 <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
+                    <div class="card-header"><h4>Dashboard</h4></div>
                     <div class="card-body">
 
                     </div>

@@ -17,7 +17,7 @@
                                 <div class="mb-3">
                                     <label for="" class="form-label">Name</label>
                                     <input type="text" class="form-control" id="name" name="name"
-                                        value="{{ $user->name }}" aria-describedby="" placeholder="Name">
+                                        value="{{ $user->name }}" aria-describedby="" placeholder="Name" required>
                                     @error('name')
                                         <div class="alert alert-danger">
                                             {{ $message }}</div>

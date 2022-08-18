@@ -7,4 +7,9 @@
 <a href="{{ route('transactions.index') }}" class="btn btn-outline rounded-pill"><i class="fas fa-money-bill me-2"></i>Transactions</a>
 <a href="{{ route('suppliers.index') }}" class="btn btn-outline rounded-pill"><i class="fas fa-industry me-2"></i>Supplier</a>
 <a href="{{ route('users.index') }}" class="btn btn-outline rounded-pill"><i class="fas fa-users me-2"></i>Customers</a>
-<a href="{{ route('users.index') }}" class="btn btn-outline rounded-pill"><i class="fas fa-truck-moving me-2"></i>Incoming</a>
+<a href="{{ route('logout') }}" class="btn btn-outline rounded-pill" onclick="event.preventDefault();
+document.getElementById('logout-form').submit();"><i class="fas fa-truck-moving me-2"></i>Incoming</a>
+
+<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+    @csrf
+</form>

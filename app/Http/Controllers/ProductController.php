@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        //
+        $data['products'] = Product::all();
+        return view('products.index', $data)->with('no', 1);
     }
 
     /**
@@ -35,51 +38,64 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'product_name' => 'required|unique:products,product_name',
+            'brand' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return back()->withErrors($validate)->withInput();
+        }
+
+        $product = new Product();
+        $product->product_name = $request->product_name;
+        $product->brand = $request->brand;
+        $product->price = $request->price;
+        $product->quantity = $request->quantity;
+        $product->alert_stock = $request->alert_stock;
+        $product->description = $request->description;
+        $product->save();
+        if ($product) {
+            return redirect()->route('products.index')->with('success', 'Product Added Successfully!');
+        }
+        return redirect()->route('products.index')->with('error', 'Failed to Add Product!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
+    public function update(Request $request, $id)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'product_name' => 'required|unique:products,product_name,' .$id,
+            // 'product_name' => 'required', Rule::unique('products','product_name')->ignore($id),
+            'brand' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return back()->withErrors($validate)->withInput();
+        }
+
+        $product = Product::find($id);
+        $product->product_name = $request->product_name;
+        $product->brand = $request->brand;
+        $product->price = $request->price;
+        $product->quantity = $request->quantity;
+        $product->alert_stock = $request->alert_stock;
+        $product->description = $request->description;
+
+        
+        if ($product->isDirty()) {
+            $product->update();
+            return redirect()->route('products.index')->with('success', 'Product Updated Successfully!');
+        }
+        return redirect()->route('products.index')->with('error', 'Nothing Changed!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Product $product)
-    {
-        //
+        Product::find($id)->delete();
+        return redirect()->back()->with('warning', 'Post Deleted Successfully');
     }
 }
