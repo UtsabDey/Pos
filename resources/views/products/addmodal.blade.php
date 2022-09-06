@@ -1,4 +1,4 @@
-<!-- Modal Add New User -->
+<!-- Modal Add New Product -->
 <div class="modal fade" id="addProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">

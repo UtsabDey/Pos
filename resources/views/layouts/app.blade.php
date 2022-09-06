@@ -34,7 +34,7 @@ $company = \App\Models\Company::first();
     <link rel="stylesheet" href="{{ asset('dataTable/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dataTable/dataTables.bootstrap5.min.css') }}">
     <link rel="stylesheet" href="{{ asset('toastr/toastr.min.css') }}">
-
+    @livewireStyles
 </head>
 
 <body>
@@ -193,6 +193,7 @@ $company = \App\Models\Company::first();
             toastr.warning("{{ session('warning') }}");
         @endif
     </script>
+    @livewireScripts
 </body>
 
 </html>

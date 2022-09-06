@@ -20,7 +20,7 @@ class CreateOrderDetailsTable extends Migration
             $table->integer('quantity');
             $table->float('unitprice');
             $table->float('amount');
-            $table->integer('discount');
+            $table->integer('discount')->nullable();
             $table->timestamps();
         });
     }

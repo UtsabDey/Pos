@@ -2,75 +2,14 @@
 @section('title', 'Orders')
 @section('content')
     <div class="container">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>
-                                Ordered Products
-                                <a href="#" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal"
-                                    data-bs-target="#addProduct"><i class="fas fa-cart-plus me-2"></i>Add Orders</a>
-                            </h4>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-striped table-bordered table-hover table-start" id="dataTable2">
-                                <thead>
-                                    <tr>
-                                        <th width="1%">#</th>
-                                        <th width="4%">Product Name</th>
-                                        <th width="2%">Quantity</th>
-                                        <th width="2%">Price</th>
-                                        <th width="2%">Discount (%)</th>
-                                        <th width="2%">Total</th>
-                                        <th width="1%"><a href="#" class="btn btn-sm btn-success add_more"><i
-                                                    class="fas fa-plus-circle"></i></a></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="addMoreProduct">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>
-                                            <select name="product_id" id="product_id" class="form-select product_id">
-                                                <option value="">Select Product</option>
-                                                @foreach ($products as $product)
-                                                    <option data-price="{{ $product->price }}" value="{{ $product->id }}">{{ $product->product_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control quantity" name="quantity[]" id="quantity">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control price" name="price[]" id="price">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control discount" name="discount[]" id="discount">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control total_amount" name="total_amount[]"
-                                                id="total_amount">
-                                        </td>
-                                        <td><a href="#" class="btn btn-sm btn-danger"><i class="fas fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Total <b class="total">0.00</b> TAKA</h4>
-                        </div>
-                        <div class="card-body">
+        @livewire('order')
+    </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
+    
+
+    <div class="modal">
+        <div id="print">
+            @include('reports.receipt')
         </div>
     </div>
 @endsection
@@ -81,12 +20,13 @@
             var product = $('.product_id').html();
             var numberofrow = ($('.addMoreProduct tr').length - 0) + 1;
             var tr = '<tr><td>' + numberofrow + '</td>' +
-                '<td><select class="form-control product_id" name="product_id[]">' + product + '</select></td>' +
-                '<td><input type="number" class="form-control quantity" name="quantity[]"></td>' +
-                '<td><input type="number" class="form-control price" name="price[]"></td>' +
-                '<td><input type="number" class="form-control discount" name="discount[]"></td>' +
-                '<td><input type="number" class="form-control total_amount" name="total_amount[]"></td>' +
-                '<td><a class="btn btn-sm delete btn-danger"><i class="fas fa-times"></i></a></td></tr>';
+                '<td><select class="form-control product_id form-select" name="product_id[]">' + product +
+                '</select></td>' +
+                '<td><input type="text" class="form-control quantity" name="quantity[]"></td>' +
+                '<td><input type="text" class="form-control price" name="price[]"></td>' +
+                '<td><input type="text" class="form-control discount" name="discount[]"></td>' +
+                '<td><input type="text" class="form-control total_amount" name="total_amount[]"></td>' +
+                '<td class="text-center"><a class="btn btn-sm delete btn-danger"><i class="fas fa-times"></i></a></td></tr>';
             $('.addMoreProduct').append(tr);
         });
 
@@ -104,7 +44,7 @@
             $('.total').html(total);
         }
 
-        $('.addMoreProduct').delegate('.product_id', 'change', function(){
+        $('.addMoreProduct').delegate('.product_id', 'change', function() {
             var tr = $(this).parent().parent();
             var price = tr.find('.product_id option:selected').attr('data-price');
             tr.find('.price').val(price);
@@ -112,18 +52,41 @@
             var discount = tr.find('.discount').val() - 0;
             var price = tr.find('.price').val() - 0;
             var total_amount = (quantity * price) - ((quantity * price * discount) / 100);
-            tr.find('.total_amount').val(total_amount); 
+            tr.find('.total_amount').val(total_amount);
             TotalAmount();
         });
 
-        $('.addMoreProduct').delegate('.quantity , .discount', 'keyup', function(){
+        $('.addMoreProduct').delegate('.quantity , .discount', 'keyup', function() {
             var tr = $(this).parent().parent();
             var quantity = tr.find('.quantity').val() - 0;
             var discount = tr.find('.discount').val() - 0;
             var price = tr.find('.price').val() - 0;
             var total_amount = (quantity * price) - ((quantity * price * discount) / 100);
-            tr.find('.total_amount').val(total_amount); 
+            tr.find('.total_amount').val(total_amount);
             TotalAmount();
-        }); 
+        });
+
+        $('#paid_amount').keyup(function() {
+            var total = $('.total').html();
+            var paid_amount = $(this).val();
+            var total_amount = paid_amount - total;
+            $('#balance').val(total_amount);
+            // $('#balance').val(total_amount).toFixed(2);
+        });
+    </script>
+    <script>
+        function PrintReceiptContent(el) {
+            var data = '<input type="button" id="PrintPageButton" class="PrintPageButton" style="display:block; width:100%; border:none; border-radius:5px; background-color:#008B8B; color:#fff; padding:14px 28px; font-size:16px; cursor:pointer; text-align:center;" value="Print Receipt" onclick="window.print()" ><br> ';
+                data += document.getElementById(el).innerHTML;
+                myReceipt = window.open("", "myWin", "left=350, top=130, width=400, height=470");
+                    myReceipt.screnX = 0;
+                    myReceipt.screnY = 0;
+                    myReceipt.document.write(data);
+                    myReceipt.document.title = "Print Receipt";
+                myReceipt.focus();
+                setTimeout(() => {
+                    myReceipt.close();
+                }, 5000);
+        }
     </script>
 @endsection

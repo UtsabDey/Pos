@@ -36,7 +36,7 @@
                                             <td>{{ $product->quantity }}</td>
                                             <td class="text-center">
                                                 @if ($product->alert_stock >= $product->quantity)
-                                                    <span class="badge bg-danger">Low Stock > {{ $product->alert_stock }}</span>
+                                                    <span class="badge bg-danger">Low Stock</span>
                                                 @else
                                                     <span class="badge bg-success">{{ $product->alert_stock }}</span>
                                                 @endif
