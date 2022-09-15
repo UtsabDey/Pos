@@ -31,9 +31,17 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 
 Route::resource('orders', OrderController::class);
+
 Route::resource('products', ProductController::class);
+
 Route::resource('suppliers', SupplierController::class);
+
 Route::resource('users', UserController::class);
+
 Route::resource('companies', CompanyController::class);
+
 Route::resource('transactions', TransactionController::class);
+
 Route::resource('settings', SettingController::class);
+
+Route::get('barcode',[ProductController::class, 'GetProductBarcode'])->name('products.barcode');

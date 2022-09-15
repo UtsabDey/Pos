@@ -8,7 +8,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('products.store') }}" method="post">
+                <form action="{{ route('products.store') }}" method="post" enctype="multipart/form-data" autocomplete="off">
                     @csrf
                     <div class="col-md-12">
                         <div class="row">
@@ -17,6 +17,14 @@
                                 <input type="text" class="form-control" id="product_name" name="product_name"
                                     aria-describedby="" placeholder="Product Name" required>
                                 @error('product_name')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Product Code</label>
+                                <input type="text" class="form-control" id="product_code" name="product_code"
+                                    aria-describedby="" placeholder="Product Code" required>
+                                @error('product_code')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -59,6 +67,13 @@
                             <div class="mb-3">
                                 <label for="" class="form-label">Description</label>
                                 <textarea class="form-control" name="description" id="description" rows="3" placeholder="Description"></textarea>
+                                @error('description')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Image</label>
+                                <input type="file" class="form-control" name="product_image" id="product_image">
                                 @error('description')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror

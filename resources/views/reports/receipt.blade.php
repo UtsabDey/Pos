@@ -54,9 +54,6 @@ $company = \App\Models\Company::first();
                 <td class="tableitem"><p class="itemtext">{{ number_format($receipt->amount, 2) }}
                 </p></td>
             </tr>
-            @empty               
-            @endforelse
-
             <tr class="tabletitle">
                 <td></td>
                 <td></td>
@@ -65,6 +62,8 @@ $company = \App\Models\Company::first();
                 <td class="Payment"><p class="itemtext">Sum Total ৳{{ number_format($receipt->amount, 2) }}
                 </p></td>
             </tr>
+            @empty               
+            @endforelse
             <tr class="tabletitle">
                 <td></td>
                 <td></td>

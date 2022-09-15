@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Picqer;
 
 class ProductController extends Controller
 {
@@ -20,22 +21,11 @@ class ProductController extends Controller
         return view('products.index', $data)->with('no', 1);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
@@ -49,11 +39,31 @@ class ProductController extends Controller
             return back()->withErrors($validate)->withInput();
         }
 
+        // $product_code = $request->product_code;
+        $product_code = rand(106890122, 10000000);
+        $redColor = '255, 0, 0';
+
+        // $generator = new Picqer\Barcode\BarcodeGeneratorJPG();
+        // file_put_contents('image/products/barcodes/' . $product_code . '.jpg', $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 3, 50));
+        
+        $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+        $barcodes = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 2, 60);
+
         $product = new Product();
         $product->product_name = $request->product_name;
         $product->brand = $request->brand;
         $product->price = $request->price;
         $product->quantity = $request->quantity;
+        $product->product_code = $product_code;
+        $product->barcode = $barcodes;
+
+        // if($request->has('product_image')){
+        //     $file = $request->file('product_image');
+        //     $file->move(public_path(). '/image/products', $file->getClientOriginalName());
+        //     $product_image = $file->getClientOriginalName();
+        //     $product->product_image = $product_image;
+        // }
+
         $product->alert_stock = $request->alert_stock;
         $product->description = $request->description;
         $product->save();
@@ -61,6 +71,11 @@ class ProductController extends Controller
             return redirect()->route('products.index')->with('success', 'Product Added Successfully!');
         }
         return redirect()->route('products.index')->with('error', 'Failed to Add Product!');
+    }
+
+    public function show(Product $product)
+    {
+        //
     }
 
     public function update(Request $request, $id)
@@ -77,11 +92,18 @@ class ProductController extends Controller
             return back()->withErrors($validate)->withInput();
         }
 
+        $product_code = rand(106890122, 10000000);
+        $redColor = '255, 0, 0';
+        $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+        $barcode = $generator->getBarcode($product_code, $generator::TYPE_STANDARD_2_5, 2, 60);
+
         $product = Product::find($id);
         $product->product_name = $request->product_name;
         $product->brand = $request->brand;
         $product->price = $request->price;
         $product->quantity = $request->quantity;
+        $product->product_code = $product_code;
+        $product->barcode = $barcode;
         $product->alert_stock = $request->alert_stock;
         $product->description = $request->description;
 
@@ -97,5 +119,11 @@ class ProductController extends Controller
     {
         Product::find($id)->delete();
         return redirect()->back()->with('warning', 'Post Deleted Successfully');
+    }
+
+    public function GetProductBarcode()
+    {
+        $data['productsBarcode'] = Product::select('barcode', 'product_code')->get();
+        return view('products.barcode.index',$data);
     }
 }

@@ -22,6 +22,14 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
+                                <label for="" class="form-label">Product Code</label>
+                                <input type="text" class="form-control" id="product_code" name="product_code" value="{{ $product->product_code }}"
+                                    aria-describedby="" placeholder="Product Code" required>
+                                @error('product_code')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
                                 <label for="" class="form-label">Brand Name</label>
                                 <input type="text" class="form-control" id="brand" name="brand"
                                     value="{{ $product->brand }}" placeholder="Brand Name" required>
