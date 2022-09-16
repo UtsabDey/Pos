@@ -8,7 +8,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('products.update', $product->id) }}" method="post">
+                <form action="{{ route('products.update', $product->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="col-md-12">
@@ -69,6 +69,14 @@
                                 <label for="" class="form-label">Description</label>
                                 <textarea class="form-control" name="description" id="description" rows="3" placeholder="Description">{{ $product->description }}</textarea>
                                 @error('description')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Image</label>
+                                <img src="{{ asset('image/products/' . $product->product_image) }}" alt="" width="50">
+                                <input type="file" class="form-control" name="product_image" id="product_image">
+                                @error('product_image')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
