@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransactionController;
@@ -44,4 +45,6 @@ Route::resource('transactions', TransactionController::class);
 
 Route::resource('settings', SettingController::class);
 
-Route::get('barcode',[ProductController::class, 'GetProductBarcode'])->name('products.barcode');
+Route::get('barcode',[ProductController::class, 'GetProductBarcode'])->name('barcode');
+
+Route::resource('sections', SectionController::class);
