@@ -125,6 +125,10 @@ $company = \App\Models\Company::first();
     <script src="{{ asset('dataTable/datatables.min.js') }}"></script>
     <script src="{{ asset('dataTable/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('toastr/toastr.min.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="{{ asset('js/custom_livewire.js') }}"></script>
+
 
     @yield('scripts')
 
