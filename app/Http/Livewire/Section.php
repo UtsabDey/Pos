@@ -10,6 +10,7 @@ class Section extends Component
     public $addMore = [1];
     public $count = 0;
     public $section_name, $section_status, $edit_id;
+    public $checked = [], $selectAll = false;
 
     public function AddMore()
     {
@@ -59,6 +60,24 @@ class Section extends Component
         $this->SwalMessage('Section Updated successfully.');
     }
 
+    public function isChecked($section_id)
+    {
+        return $this->checked && $this->selectAll ? in_array($section_id, $this->checked) : in_array($section_id, $this->checked);
+    }
+
+    public function updatedSelectAll($value_in_array)
+    {
+        $value_in_array ? $this->checked = ModelsSection::pluck('id') : $this->checked = []; 
+    }
+
+    public function ConfirmBulkDelete()
+    {
+        $this->dispatchBrowserEvent('Swal:DeletedRecord', [
+            'title' => 'Are you sure you want to delete All?',
+            'id' => $this->checked,
+        ]);
+    }
+
     public function ConfirmDelete($section_id, $section_name)
     {
         // dd($section_id, $section_name);
@@ -70,8 +89,14 @@ class Section extends Component
 
     public function RecordDeleted($section_id)
     {
-        $section = ModelsSection::find($section_id);
-        $section->delete();
+        if ($this->checked) {
+            ModelsSection::whereIn('id', $this->checked)->delete();
+            $this->checked = []; 
+            $this->selectAll = false;
+        } else {
+            $section = ModelsSection::find($section_id);
+            $section->delete();
+        }
     }
 
     public function FormReset()
